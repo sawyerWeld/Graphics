@@ -7,7 +7,6 @@ win = None
 
 
 def pt(x, y):
-    print('making point with color', cur_color)
     p = Point(x,y)
     p.setFill(cur_color)
     p.draw(win)
