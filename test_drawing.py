@@ -11,5 +11,12 @@ def draw():
     gm.pt(200, 250)
     gm.col('blue')
     gm.pt(50, 100)
+    gm.col('red')
+    gm.rect(50,50,50,50)
+
+def rect(x, y, w, h):
+    for i in range(h):
+        for j in range(w):
+            gm.pt(x+j, y+i)
 
 gm.run_drawing(setup_function = setup, draw_function = draw)
