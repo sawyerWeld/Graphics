@@ -1,4 +1,6 @@
 from graphics import *
+import numpy as np
+
 cur_color = 'black'
 background = 'white'
 width = 400
@@ -15,6 +17,19 @@ def rect(x, y, w, h):
     for i in range(h):
         for j in range(w):
             pt(x+j, y+i)
+
+def line(x0, y0, x1, y1):
+    deltax = x1 - x0
+    deltay = y1 - y0
+    deltaerr = abs(deltay / deltax)
+    error = 0
+    y = y0
+    for x in range(x0, x1):
+        pt(x,y)
+        error = error + deltaerr
+        if error >= 0.5:
+            y = y + np.sign(deltay) 
+            error = error + 1
 
 def col(new_color):
     global cur_color 
@@ -35,5 +50,8 @@ def run_drawing(setup_function, draw_function):
     win = GraphWin("Graphics Window", width, height, autoflush=False)
     win.setBackground(background)
     draw_function()
-    win.getMouse() # Waits until mouse has been pressed in window
+    # I'd like to have the window hang until the user presses enter
+    # I'd use python's input() method but the terminal doesn't
+    # stay focused when the graphics window opens
+    win.getMouse()
     win.close()

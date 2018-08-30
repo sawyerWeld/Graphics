@@ -3,7 +3,7 @@ import graphics_minimal as gm
 def setup():
     gm.set_dimensions(250,500)
     back = gm.color_rgb(100, 0 , 255)
-    gm.set_background(back)
+    gm.set_background('black')
 
 def draw():
     gm.pt(50, 50)
@@ -13,6 +13,9 @@ def draw():
     gm.pt(50, 100)
     gm.col('red')
     gm.rect(50,50,50,50)
+    gm.line(0,0,50,50)
+    gm.col('white')
+    gm.line(100,100,126,155)
 
 def rect(x, y, w, h):
     for i in range(h):
