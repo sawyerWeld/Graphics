@@ -14,6 +14,7 @@ rect(x, y, w, h)
 line(x0,y0,x1,y1)
 	Draws a line from (x0,y0) to (x1,y1)
 	Currently implementing changes for this
+	Special case for vertical lines because slope = 0 caused divide by 0
 
 Currently implementing:
 pen thickness, styles, antialiasing for line()
