@@ -19,16 +19,21 @@ def rect(x, y, w, h):
             pt(x+j, y+i)
 
 def line(x0, y0, x1, y1):
-    deltax = x1 - x0
-    deltay = y1 - y0
-    deltaerr = abs(deltay / deltax)
+    # All lines go left to right
+    if x0 > x1:
+        x0, x1 = x1, x0
+        y0, y1 = y1, y0
+    dx = x1 - x0
+    dy = y1 - y0
+    derror = abs(dy / float(dx))
+    print(x0, y0, x1, y1, derror)
     error = 0
     y = y0
     for x in range(x0, x1):
         pt(x,y)
-        error = error + deltaerr
+        error = error + derror
         if error >= 0.5:
-            y = y + np.sign(deltay) 
+            y = y + np.sign(dy) 
             error = error + 1
 
 def col(new_color):

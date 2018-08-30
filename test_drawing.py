@@ -6,16 +6,8 @@ def setup():
     gm.set_background('black')
 
 def draw():
-    gm.pt(50, 50)
-    gm.col('red')
-    gm.pt(200, 250)
-    gm.col('blue')
-    gm.pt(50, 100)
-    gm.col('red')
-    gm.rect(50,50,50,50)
-    gm.line(0,0,50,50)
     gm.col('white')
-    gm.line(100,100,126,155)
+    gm.line(0,400,200,100)
 
 def rect(x, y, w, h):
     for i in range(h):
