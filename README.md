@@ -1,4 +1,6 @@
 # Graphics
+# Work in progress
+
 Creating a raster graphics library from just one function
 
 Current features:
