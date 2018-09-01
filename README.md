@@ -22,3 +22,4 @@ pen thickness, styles, antialiasing for line()
 Currently thinking about:
 Real space vs. pixel space. I think I need to store a global transition matrix that maps from the first to the later. 
 
+How to test features robustly. I think I may implement a 2d array as a screen buffer that is created when I call the createwindow method and written to when i call the pt() method.

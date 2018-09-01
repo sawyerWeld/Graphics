@@ -6,13 +6,19 @@ background = 'white'
 width = 400
 height = 500
 win = None
-
+# The testing buffer is an expiremental testing feature
+# Everytime a pixel is painted, the testing buffer is updated as well
+# This makes testing the program much simpler
+testing_buffer = None
 
 def pt(coords):
     x,y = coords
+    if (x >= width or y >= height):
+        return
     p = Point(x,y)
     p.setFill(cur_color)
     p.draw(win)
+    testing_buffer[x][y] = 111
 
 
 def rect(x, y, w, h):
@@ -42,6 +48,8 @@ def line(start, end):
         y0,y1 = y1,y0
 
     # If slope > 1, we rotate
+    
+    
     rotated = False
     if (abs(dy) > abs(dx)):
         rotated = True
@@ -76,9 +84,10 @@ def set_background(color):
 
 
 def set_dimensions(w, h):
-    global width, height
+    global width, height, testing_buffer
     width = w
     height = h
+    testing_buffer = np.zeros((width,height), dtype = np.int)
 
 
 def run_drawing(setup_function, draw_function):
