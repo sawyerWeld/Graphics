@@ -2,6 +2,9 @@ from graphics import *
 import numpy as np
 
 cur_color = 'black'
+col_r = 100000000
+col_g = 100000
+col_b = 100
 background = 'white'
 width = 400
 height = 500
@@ -9,6 +12,7 @@ win = None
 # The testing buffer is an expiremental testing feature
 # Everytime a pixel is painted, the testing buffer is updated as well
 # This makes testing the program much simpler
+testing_mode = True
 testing_buffer = None
 
 def pt(coords):
@@ -18,13 +22,15 @@ def pt(coords):
     p = Point(x,y)
     p.setFill(cur_color)
     p.draw(win)
-    testing_buffer[x][y] = 111
+    if testing_mode:
+        global testing_buffer
+        testing_buffer[x][y] = col_r + col_g + col_b
 
 
 def rect(x, y, w, h):
     for i in range(h):
         for j in range(w):
-            pt(x+j, y+i)
+            pt((x+j, y+i))
 
 
 def line(start, end):
@@ -74,8 +80,15 @@ def line(start, end):
 
 
 def col(new_color):
-    global cur_color 
-    cur_color = new_color
+    global cur_color, col_r, col_g, col_b
+    if isinstance(new_color, tuple):
+        r,g,b = new_color
+        col_r = r * 1000000
+        col_g = g * 1000
+        col_b = b
+        cur_color = color_rgb(r,g,b)
+    else:
+        cur_color = new_color
 
 
 def set_background(color):

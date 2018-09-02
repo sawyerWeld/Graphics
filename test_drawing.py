@@ -1,6 +1,6 @@
 import graphics_minimal as gm
-width = 5
-height = 5
+width = 500
+height = 500
 
 
 def setup():
@@ -11,7 +11,10 @@ def setup():
 def draw():
     gm.col('red')
     test_grids(mode = 1)
-    gm.col('white')
+    gm.col((255,0,0))
+    gm.rect(0,0,20,20)
+    gm.col((150,0,150))
+    gm.line((0,0),(500,500))
     print(gm.testing_buffer)
 
 def test_grids(mode = 0, inc = 50):
