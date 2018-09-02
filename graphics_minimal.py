@@ -38,7 +38,6 @@ def line(start, end):
     x1,y1 = end
     dx = x1 - x0
     dy = y1 - y0
-
     # Handle vertical lines
     if dx == 0:
         if y0 > y1:
@@ -47,36 +46,46 @@ def line(start, end):
             pt((x0,i))
         return
 
-    # Lines go left to right
-    # If they dont, swap the points
-    if x0 > x1:
-        x0,x1 = x1,x0
-        y0,y1 = y1,y0
 
     # If slope > 1, we rotate
     rotated = False
     if (abs(dy) > abs(dx)):
         rotated = True
-        print(rotated, start, end)
         x0,y0 = y0,x0
         x1,y1 = y1,x1
     
+    # Lines go left to right
+    # If they dont, swap the points
+    if x0 > x1:
+        x0,x1 = x1,x0
+        y0,y1 = y1,y0
     dx = x1 - x0
     dy = y1 - y0
-
     err = int(dx / 2.0)
     y_inc = 1 if y0 < y1 else -1
+    
 
     y = y0
     for x in range(x0, x1 + 1):
         point = (y, x) if rotated else (x, y)
         pt(point)
-        # print(point[0], point[1])
         err -= abs(dy)
         if err < 0:
             y += y_inc
             err += dx
 
+def circle(center, r):
+    x,y = center
+    pts = []
+    theta = 0.0
+    while theta < 2*np.pi:
+        x_hat = int(round(x+r*np.sin(theta)))
+        y_hat = int(round(y+r*np.cos(theta)))
+        pts.append((x_hat, y_hat))
+        theta += np.pi / r
+    for i in range(len(pts)-1):
+        line(pts[i],pts[i+1])
+        
 
 def col(new_color):
     global cur_color, col_r, col_g, col_b

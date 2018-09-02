@@ -13,7 +13,9 @@ def draw():
     # test_grids(mode = 1)
     gm.col((150,0,150))
     # print(gm.testing_buffer)
-    starburst()
+    # starburst()
+    # gm.line((100,100),(110,75))
+    gm.circle((300,300),100)
 
 def starburst():
     x,y = (400,400)
