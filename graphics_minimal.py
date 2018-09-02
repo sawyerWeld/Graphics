@@ -48,17 +48,16 @@ def line(start, end):
         return
 
     # Lines go left to right
+    # If they dont, swap the points
     if x0 > x1:
-        print('swap')
         x0,x1 = x1,x0
         y0,y1 = y1,y0
 
     # If slope > 1, we rotate
-    
-    
     rotated = False
     if (abs(dy) > abs(dx)):
         rotated = True
+        print(rotated, start, end)
         x0,y0 = y0,x0
         x1,y1 = y1,x1
     

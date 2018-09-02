@@ -1,6 +1,7 @@
 import graphics_minimal as gm
-width = 500
-height = 500
+import numpy as np
+width = 800
+height = 800
 
 
 def setup():
@@ -9,13 +10,21 @@ def setup():
     gm.set_background('black')
 
 def draw():
-    gm.col('red')
-    test_grids(mode = 1)
-    gm.col((255,0,0))
-    gm.rect(0,0,20,20)
+    # test_grids(mode = 1)
     gm.col((150,0,150))
-    gm.line((0,0),(500,500))
-    print(gm.testing_buffer)
+    # print(gm.testing_buffer)
+    starburst()
+
+def starburst():
+    x,y = (400,400)
+    theta = np.pi
+    r = 300
+    n = 100
+    for i in range(0,n):
+        x0 = int(x + r * np.sin(theta))
+        y0 = int(y + r * np.cos(theta))
+        gm.line((x,y),(x0,y0))
+        theta += 2*np.pi/n
 
 def test_grids(mode = 0, inc = 50):
     h = 0
