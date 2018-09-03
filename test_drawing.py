@@ -15,7 +15,14 @@ def draw():
     # print(gm.testing_buffer)
     # starburst()
     # gm.line((100,100),(110,75))
-    gm.circle((300,300),100)
+    points = []
+    n = 3
+    for i in range(0,8):
+        for j in range(0,8):
+            x = (100*j) + 50
+            y = (100*i) + 50
+            gm.circle((x,y),50,n)
+            n+=1
 
 def starburst():
     x,y = (400,400)

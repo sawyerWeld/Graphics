@@ -74,17 +74,20 @@ def line(start, end):
             y += y_inc
             err += dx
 
-def circle(center, r):
+def circle(center, r, nPoints = None):
     x,y = center
     pts = []
     theta = 0.0
+    if nPoints == None:
+        nPoints = r/2
     while theta < 2*np.pi:
         x_hat = int(round(x+r*np.sin(theta)))
         y_hat = int(round(y+r*np.cos(theta)))
         pts.append((x_hat, y_hat))
-        theta += np.pi / r
+        theta += 2*np.pi / nPoints
     for i in range(len(pts)-1):
         line(pts[i],pts[i+1])
+    line(pts[len(pts)-1],pts[0])
         
 
 def col(new_color):
