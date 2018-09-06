@@ -15,14 +15,7 @@ def draw():
     # print(gm.testing_buffer)
     # starburst()
     # gm.line((100,100),(110,75))
-    points = []
-    n = 3
-    for i in range(0,8):
-        for j in range(0,8):
-            x = (100*j) + 50
-            y = (100*i) + 50
-            gm.circle((x,y),50,n)
-            n+=1
+    gm.circle((400,400),100)
 
 def starburst():
     x,y = (400,400)
@@ -34,6 +27,16 @@ def starburst():
         y0 = int(y + r * np.cos(theta))
         gm.line((x,y),(x0,y0))
         theta += 2*np.pi/n
+
+def polygon_grid():
+    points = []
+    n = 3
+    for i in range(0,8):
+        for j in range(0,8):
+            x = (100*j) + 50
+            y = (100*i) + 50
+            gm.circle_old((x,y),50,n)
+            n+=1
 
 def test_grids(mode = 0, inc = 50):
     h = 0

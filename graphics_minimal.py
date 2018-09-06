@@ -74,7 +74,7 @@ def line(start, end):
             y += y_inc
             err += dx
 
-def circle(center, r, nPoints = None):
+def circle_old(center, r, nPoints = None):
     x,y = center
     pts = []
     theta = 0.0
@@ -89,6 +89,28 @@ def circle(center, r, nPoints = None):
         line(pts[i],pts[i+1])
     line(pts[len(pts)-1],pts[0])
         
+def circle(center, r):
+    arc = []
+    x_c, y_c = center
+    p = 1.25 - r
+    x, y = (0, r)
+    k = 0
+    while x < y:
+        if p < 0:
+            p += 2*x + 1
+        else:
+            y -= 1
+            p += 2*x + 1 - 2*y
+        arc.append((x,y))
+        x += 1
+    for p in arc:
+        x,y = p
+        for x_sign in [-1, 1]:
+            for y_sign in [-1,1]:
+                x_hat = x_sign * x + x_c
+                y_hat = y_sign * y + y_c
+                pt((x_hat,y_hat))
+                pt((y_hat,x_hat))
 
 def col(new_color):
     global cur_color, col_r, col_g, col_b
