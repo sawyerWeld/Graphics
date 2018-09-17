@@ -6,7 +6,6 @@ height = 800
 
 def setup():
     gm.set_dimensions(width, height)
-    back = gm.color_rgb(100, 0 , 255)
     gm.set_background('black')
 
 def draw():
@@ -14,6 +13,7 @@ def draw():
     gm.col((150,0,150))
     # print(gm.testing_buffer)
     # starburst()
+    rect(200,200,50,50)
     # gm.line((100,100),(110,75))
     gm.circle((400,400),100)
 
@@ -28,16 +28,6 @@ def starburst():
         gm.line((x,y),(x0,y0))
         theta += 2*np.pi/n
 
-def polygon_grid():
-    points = []
-    n = 3
-    for i in range(0,8):
-        for j in range(0,8):
-            x = (100*j) + 50
-            y = (100*i) + 50
-            gm.circle_old((x,y),50,n)
-            n+=1
-
 def test_grids(mode = 0, inc = 50):
     h = 0
     while h < height:
@@ -51,6 +41,6 @@ def test_grids(mode = 0, inc = 50):
 def rect(x, y, w, h):
     for i in range(h):
         for j in range(w):
-            gm.pt(x+j, y+i)
+            gm.pt((x+j, y+i))
 
 gm.run_drawing(setup_function = setup, draw_function = draw)
