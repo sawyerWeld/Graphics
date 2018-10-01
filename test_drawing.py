@@ -16,13 +16,15 @@ def draw():
     rect(200,200,50,50)
     # gm.line((100,100),(110,75))
     gm.circle((400,400),100)
+    gm.stroke(1)
+    gm.line((0,0), (400, 100))
 
 def starburst():
     x,y = (400,400)
     theta = np.pi
     r = 300
-    n = 100
-    for i in range(0,n):
+    n = 100    
+    for _ in range(0,n):
         x0 = int(x + r * np.sin(theta))
         y0 = int(y + r * np.cos(theta))
         gm.line((x,y),(x0,y0))

@@ -8,6 +8,7 @@ col_b = 100
 background = 'white'
 width = 400
 height = 500
+stroke_w = 1
 win = None
 # The testing buffer is an expiremental testing feature
 # Everytime a pixel is painted, the testing buffer is updated as well
@@ -27,6 +28,11 @@ def pt(coords):
         testing_buffer[x][y] = col_r + col_g + col_b
 
 
+def stroke(w):
+    global stroke_w
+    stroke_w = w
+
+
 def rect(x, y, w, h):
     for i in range(h):
         for j in range(w):
@@ -34,19 +40,12 @@ def rect(x, y, w, h):
 
 
 def line(start, end):
+    print(stroke_w)
     x0,y0 = start
     x1,y1 = end
     dx = x1 - x0
     dy = y1 - y0
-    # Handle vertical lines
-    if dx == 0:
-        if y0 > y1:
-            y1,y0 = y0,y1
-        for i in range(y0,y1):
-            pt((x0,i))
-        return
-
-
+  
     # If slope > 1, we rotate
     rotated = False
     if (abs(dy) > abs(dx)):
@@ -67,8 +66,11 @@ def line(start, end):
 
     y = y0
     for x in range(x0, x1 + 1):
-        point = (y, x) if rotated else (x, y)
-        pt(point)
+
+        for i in range(stroke_w):
+            point = (y+i, x) if rotated else (x, y+i)
+            pt(point)
+       
         err -= abs(dy)
         if err < 0:
             y += y_inc
