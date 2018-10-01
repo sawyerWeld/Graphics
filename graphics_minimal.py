@@ -40,7 +40,6 @@ def rect(x, y, w, h):
 
 
 def line(start, end):
-    print(stroke_w)
     x0,y0 = start
     x1,y1 = end
     dx = x1 - x0

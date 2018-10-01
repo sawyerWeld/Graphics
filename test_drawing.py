@@ -1,5 +1,6 @@
 import graphics_minimal as gm
 import numpy as np
+import shapes
 width = 800
 height = 800
 
@@ -18,6 +19,8 @@ def draw():
     gm.circle((400,400),100)
     gm.stroke(1)
     gm.line((0,0), (400, 100))
+    mySquare = shapes.Square(0,0,100)
+    mySquare.draw()
 
 def starburst():
     x,y = (400,400)
