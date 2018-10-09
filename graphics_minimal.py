@@ -44,6 +44,7 @@ def line(start, end):
     x1,y1 = end
     dx = x1 - x0
     dy = y1 - y0
+    pts = []
   
     # If slope > 1, we rotate
     rotated = False
@@ -65,15 +66,16 @@ def line(start, end):
 
     y = y0
     for x in range(x0, x1 + 1):
-
         for i in range(stroke_w):
             point = (y+i, x) if rotated else (x, y+i)
             pt(point)
-       
+            pts.append(point)
         err -= abs(dy)
         if err < 0:
             y += y_inc
             err += dx
+
+    return pts
 
 
 def circle(center, r):
@@ -108,6 +110,10 @@ def col(new_color):
         cur_color = color_rgb(r,g,b)
     else:
         cur_color = new_color
+
+
+def save_file(filename):
+    save(filename)
 
 
 def set_background(color):
