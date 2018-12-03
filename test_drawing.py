@@ -1,6 +1,8 @@
 import graphics_minimal as gm
 import numpy as np
 import shapes
+from time import sleep
+
 width = 800
 height = 800
 
@@ -18,10 +20,15 @@ def draw():
     # gm.line((100,100),(110,75))
     # gm.circle((400,400),100)
     # gm.line((0,0), (400, 100))
-    # mySquare = shapes.Square(0,0,100)
+    mySquare = shapes.Square(50,70,100)
+    
     # mySquare.draw()
+    shapes.draw_all()
+    sleep(1000)
+    shapes.translation(100,0,0)
+    shapes.draw_all()
     # polygon_fill((50,50), (500,50), (500,500), (300,100))
-    octagon()
+    # octagon()
 
 def polygon_fill(*args):
     verts = list(args)

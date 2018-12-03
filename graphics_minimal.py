@@ -1,6 +1,7 @@
 from graphics import *
 import numpy as np
 
+
 cur_color = 'black'
 col_r = 100000000
 col_g = 100000
@@ -127,6 +128,8 @@ def set_dimensions(w, h):
     height = h
     testing_buffer = np.zeros((width,height), dtype = np.int)
 
+def draw_background():
+    pass
 
 def run_drawing(setup_function, draw_function):
     global win
