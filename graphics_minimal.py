@@ -7,15 +7,43 @@ col_r = 100000000
 col_g = 100000
 col_b = 100
 background = 'white'
-width = 400
-height = 500
+# bg_color = color(background)
+width = 500
+height = 400
 stroke_w = 1
 win = None
 # The testing buffer is an expiremental testing feature
 # Everytime a pixel is painted, the testing buffer is updated as well
 # This makes testing the program much simpler
-testing_mode = True
+testing_mode = False
 testing_buffer = None
+
+arr = [[ None for j in range(width)] for i in range(height)]
+
+def print_arr():
+    for i in arr:
+        print(i)
+
+def clear_arr():
+    for i in range(len(arr)):
+        arr[i] = [background for j in range(len(arr[0]))]
+
+def draw_arr():
+    for i in range(len(arr)):
+        for j in range(len(arr[0])):
+            draw_pt((i,j),arr[i][j])
+
+def draw_pt(coords, col):
+    x,y = coords
+    p = Point(x,y)
+    p.setFill(col)
+    p.draw(win)
+    
+
+
+def get_win():
+    return win
+
 
 def pt(coords):
     x,y = coords
@@ -24,6 +52,7 @@ def pt(coords):
     p = Point(x,y)
     p.setFill(cur_color)
     p.draw(win)
+    arr[x][y] = cur_color
     if testing_mode:
         global testing_buffer
         testing_buffer[x][y] = col_r + col_g + col_b
@@ -69,7 +98,7 @@ def line(start, end):
     for x in range(x0, x1 + 1):
         for i in range(stroke_w):
             point = (y+i, x) if rotated else (x, y+i)
-            pt(point)
+            # pt(point)
             pts.append(point)
         err -= abs(dy)
         if err < 0:
@@ -114,7 +143,8 @@ def col(new_color):
 
 
 def save_file(filename):
-    save(filename)
+    #save(filename)
+    pass
 
 
 def set_background(color):
@@ -129,7 +159,15 @@ def set_dimensions(w, h):
     testing_buffer = np.zeros((width,height), dtype = np.int)
 
 def draw_background():
-    pass
+    win.setBackground(background)
+
+def start():
+    global win
+    win = GraphWin("Graphics Window", width, height, autoflush=False)
+    win.setBackground(background)
+    c = Circle(Point(50,50),100)
+    c.draw(win)
+    print('exited')
 
 def run_drawing(setup_function, draw_function):
     global win
