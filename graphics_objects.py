@@ -32,11 +32,12 @@ class point(graphics_object):
     def __str__(self):
         return 'point at {}'.format(self.coords)
 
-class line():
-    def __init__(self, p1, p2):
+class line(graphics_object):
+    def __init__(self, p1, p2, color = 'blue'):
         self.p1 = p1
         self.p2 = p2
         self.point_list = self.bressenhelm(p1, p2)
+        self.color = color
         
     def bressenhelm(self, start, end):
         x0,y0 = start
@@ -81,10 +82,11 @@ class line():
 
 class square(graphics_object):
     # super.coords defines the top left corner
-    def __init__(self, coords, side_length):
+    def __init__(self, coords, side_length, color = 'green'):
         self.coords = coords
         self.side_length = side_length
         self.point_list = self.generate_pointlist()
+        self.color = color
 
     # List of points in real space
     def generate_pointlist(self): 
@@ -99,6 +101,85 @@ class square(graphics_object):
 
     def __str__(self):
         return 'sqr'
+
+class cirle(graphics_object):
+    # super.coords defines the center 
+    def __init__(self, coords, radius, color = 'red'):
+        self.coords = coords
+        self.radius = radius
+        self.point_list = self.generate_pointlist()
+        self.color = color
+
+    def generate_pointlist(self):
+        li = []
+        center = self.coords
+        r = self.radius
+        arc = []
+        x_c, y_c = center
+        p = 1.25 - r
+        x, y = (0, r)
+        while x < y:
+            if p < 0:
+                p += 2*x + 1
+            else:
+                y -= 1
+                p += 2*x + 1 - 2*y
+            arc.append((x,y))
+            x += 1
+        for p in arc:
+            x,y = p
+            for x_sign in [-1, 1]:
+                for y_sign in [-1,1]:
+                    x_hat = x_sign * x + x_c
+                    y_hat = y_sign * y + y_c
+                    li.append((x_hat,y_hat))
+                    li.append((y_hat,x_hat))
+        return li
+
+class polygon(graphics_object):
+    def __init__(self, vertex_list, color = 'purple'):
+        self.coords = vertex_list[0]
+        self.vertex_list = vertex_list
+        self.point_list = self.generate_pointlist()
+        self.color = color
+
+    def generate_pointlist(self):
+        li = []
+        verts = self.vertex_list
+        # print(verts)
+        y_min = 10000
+        y_max = 0
+        x_min = 10000
+        x_max = 0
+        for v in verts:
+            x, y = v
+            if x < x_min:
+                x_min = x
+            elif x > x_max:
+                x_max = x
+            if y < y_min:
+                y_min = y
+            elif y > y_max:
+                y_max = y
+
+        pts = []
+        for i in range(len(verts)-1):
+            pts.extend(line(verts[i], verts[i+1]).point_list)
+        pts.extend(line(verts[0], verts[-1]).point_list)
+
+        # print(x_min, x_max, y_min, y_max)
+        for y in range(y_min, y_max+1):
+            passed = 0
+            for x in range(x_min, x_max+1):
+                if (x,y) in verts:
+                    break
+                if (x,y) in pts:
+                    passed += 1
+                elif passed % 2 == 1:
+                    li.append((x,y))
+        return li
+
+
 
 
 if __name__ == "__main__":

@@ -19,12 +19,14 @@ def draw_function():
     pt((10,10))
     my_line = g.line((10,10), (10, 100))
     my_square = g.square((200,200),50)
-    screen_objects.add_multiple([my_line, my_square])
+    cr1 = g.cirle((100,100),100)
+    ply1 = g.polygon([(10,10),(50,50),(20,200)])
+    screen_objects.add_multiple([my_line, my_square, cr1, ply1])
 
     for obj in screen_objects.obj_list:
         # add draw them to the real_space buffer
         for x,y in obj.point_list:
-                real_space[x][y] = cur_color
+                real_space[x][y] = obj.color
         pass
 
 def real_space_to_pixel_space():
