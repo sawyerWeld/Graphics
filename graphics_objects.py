@@ -1,4 +1,6 @@
 # graphics_objects.py
+import itertools
+import math
 
 class group():
     def __init__(self):
@@ -21,7 +23,16 @@ class graphics_object():
     def __init__(self, coords, color=None):
         self.coords = coords
         self.point_list = []
-        self.color = 'blue'
+        self.color = color
+    
+    def translate(self, dx, dy):
+        self.point_list = [(x+dx,y+dy) for (x,y) in self.point_list]
+
+    def top_left_bound(self):
+        # Find the top left point in a rectangular bound of the obj
+        min_x = min(self.point_list, key=lambda x: x[0])
+        min_y = min(self.point_list, key=lambda x: x[1])
+        return (min_x[0], min_y[1])
 
     def __str__(self):
         raise NotImplementedError
@@ -75,7 +86,8 @@ class line(graphics_object):
                 y += y_inc
                 err += dx
 
-        return pts
+        return sorted(pts, key = lambda x: x[1], reverse=True)
+        #return pts
 
     def __str__(self):
         return 'Line from {} to {}'.format(self.p1, self.p2)
@@ -87,6 +99,10 @@ class square(graphics_object):
         self.side_length = side_length
         self.point_list = self.generate_pointlist()
         self.color = color
+
+    def scale(self, scalar):
+        self.side_length = math.floor(self.side_length * scalar)
+        self.point_list = self.generate_pointlist()
 
     # List of points in real space
     def generate_pointlist(self): 
@@ -109,6 +125,10 @@ class cirle(graphics_object):
         self.radius = radius
         self.point_list = self.generate_pointlist()
         self.color = color
+    
+    def scale(self, d):
+        self.radius *= d
+        self.point_list = self.generate_pointlist()
 
     def generate_pointlist(self):
         li = []
@@ -137,11 +157,45 @@ class cirle(graphics_object):
         return li
 
 class polygon(graphics_object):
-    def __init__(self, vertex_list, color = 'purple'):
+    def __init__(self, vertex_list, color = 'purple', fill = None):
         self.coords = vertex_list[0]
         self.vertex_list = vertex_list
-        self.point_list = self.generate_pointlist()
-        self.color = color
+        if fill == None:
+            # Wireframe
+            self.color = color
+            self.point_list = self.generate_pointlist_nofill()
+        else:
+            self.border_color = color
+            self.color = fill
+            self.point_list = self.generate_pointlist()
+        self.fill = fill
+        
+    def scale(self, d):
+        self.vertex_list = [(x*d,y*d) for (x,y) in self.vertex_list]
+        if self.fill == None:
+            self.generate_pointlist_nofill()
+        else:
+            self.point_list = self.generate_pointlist()
+
+
+    def get_border(self):
+        wireframe = graphics_object([], color = self.border_color)
+        wireframe.point_list = self.generate_pointlist_nofill()
+        return wireframe
+
+    def generate_pointlist_nofill(self):
+        li = []
+        verts = self.vertex_list
+        pts = []
+        for i in range(len(verts)-1):
+            pts.extend(line(verts[i], verts[i+1]).point_list)
+        pts.extend(line(verts[0], verts[-1]).point_list)
+        li = [x for x in pts if x not in verts]
+        li.extend(verts)
+        # by removing all instances of vertices from the pt list 
+        # and then adding them all back in, we ensure that ther
+        # is only one instance of each vertex in the list
+        return li
 
     def generate_pointlist(self):
         li = []
@@ -162,25 +216,73 @@ class polygon(graphics_object):
             elif y > y_max:
                 y_max = y
 
-        pts = []
+        # # generate outline
+        # pts = self.generate_pointlist_nofill()
+
+        # # fill in the outline
+        # for y in range(y_min,y_max+1):
+        #     drawing = False
+        #     for x in range(x_min, x_max+1):
+        #         pt = (x,y)
+        #         if pts.count(pt) == 2 or pt in verts:
+        #             # This happens when lines oversect
+        #             # Like for tight angles
+        #             li.append(pt)
+        #             continue
+        #         if pts.count(pt) == 1:
+        #             # this is on 1 line
+        #             drawing = not drawing
+        #             continue
+        #         if drawing == True:
+        #             li.append(pt)
+        edges = []
         for i in range(len(verts)-1):
-            pts.extend(line(verts[i], verts[i+1]).point_list)
-        pts.extend(line(verts[0], verts[-1]).point_list)
+            edges.append(line(verts[i], verts[i+1]).point_list)
+        edges.append(line(verts[0], verts[-1]).point_list)
 
-        # print(x_min, x_max, y_min, y_max)
-        for y in range(y_min, y_max+1):
-            passed = 0
-            for x in range(x_min, x_max+1):
-                if (x,y) in verts:
-                    break
-                if (x,y) in pts:
-                    passed += 1
-                elif passed % 2 == 1:
-                    li.append((x,y))
+        end_points = [(x[0],x[-1]) for x in edges]
+
+
+        for y in range(y_min,y_max+1):
+            # First step is find all the intersections
+            # an edge has an intersection one side is below the line
+            # and the other side is above the line
+            intersecting_edges = []
+            for index, pair in enumerate(end_points):
+                pt1, pt2 = pair
+                if pt1[1] > y and pt2[1] <= y:
+                    intersecting_edges.append(index)
+            # We've determined which edges we intersect
+            # Now find the point of intersection
+            # Can there be multiple?
+            nodes = []
+            for i in intersecting_edges:
+                edge = edges[i]
+                for pair in edge:
+                    _,y_p = pair
+                    if y_p == y:
+                        nodes.append(pair)
+                        continue
+            # sort by x value
+            nodes.sort(key = lambda x: x[0])
+            pairs = [(nodes[i],nodes[i+1]) for i in range(0,len(nodes),2)]
+            for pair in pairs:
+                pt1,pt2 = pair
+                x1 = pt1[0]
+                x2 = pt2[0]
+                x_values = list(range(x1,x2+1))
+                segment = [(x,y) for x in x_values]
+                li.extend(segment)
+                
+
+            # for x in range(x_min, x_max+1):
+            #     pt = (x,y)
+            #     # if there are an odd number of intersections on each side, etc
+                
+        
+        
+        # li.extend(pts)
         return li
-
-
-
 
 if __name__ == "__main__":
     print('Main Thread')

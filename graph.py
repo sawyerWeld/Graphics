@@ -1,14 +1,16 @@
 from graphics import *
 import graphics_objects as g
 import itertools
+import copy
 
 # Redoing graphics because it became a software engineering mess
 win = None # have to have this at global level to use zelle graphics
 width = 400
 height = 400
-real_space =  [[ 'black' for j in range(width)] for i in range(height)]
+real_space =  [['black' for j in range(width)] for i in range(height)]
 cur_color = 'green'
-zoom_level = 400 # zoom at 400, 200, 100?
+zoom_level = 1
+camera_position = (200,200)
 screen_objects = g.group() # the objects we want displayed
 
 def pt(coords):
@@ -16,21 +18,43 @@ def pt(coords):
     real_space[x][y] = cur_color
 
 def draw_function():
-    pt((10,10))
-    my_line = g.line((10,10), (10, 100))
-    my_square = g.square((200,200),50)
-    cr1 = g.cirle((100,100),100)
-    ply1 = g.polygon([(10,10),(50,50),(20,200)])
-    screen_objects.add_multiple([my_line, my_square, cr1, ply1])
-
+    # pt((10,10))
+    # ln = g.line((10,10), (10, 100))
+    sqr = g.square((50,50),100)
+    crl = g.cirle((200,200),50)
+    # ply = g.polygon([(10,110),(55,60),(100,110),(100,200),(55,150),(10,200)], color='red', fill='white')
+    sqr2 = copy.deepcopy(sqr)
+    sqr2.scale(2)
+    sqr2.color = 'red'
+    # make this into a method in the polgon object 
+    # screen_objects.add(sqr)
+    screen_objects.add_multiple([sqr, sqr2, crl])
+    
+    zoom(2)
+    
+    #pan(-100,-100)
     for obj in screen_objects.obj_list:
-        # add draw them to the real_space buffer
+        # draw them to the real_space buffer
         for x,y in obj.point_list:
+            if x < width and x > 0 and y < height and y > 0:
                 real_space[x][y] = obj.color
-        pass
+
+def zoom(dz):
+    scalechange = dz - 1
+    offsetX = -(200 * scalechange)
+    offsetY = -(200 * scalechange)
+    
+    for o in screen_objects.obj_list:
+        o.translate(offsetX,offsetY)
+
+def pan(dx, dy):
+    for obj in screen_objects.obj_list:
+        obj.point_list = [(x+dx,y+dy) for x,y in obj.point_list]
+            
 
 def real_space_to_pixel_space():
     # TODO
+    # So to 'zoom' out maybe we can just decrease the size of everything?
     for x,y in itertools.product(range(width), range(height)):
         pixel = Point(x,y)
         pixel.setFill(real_space[x][y])
