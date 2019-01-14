@@ -20,17 +20,22 @@ def pt(coords):
 def draw_function():
     # pt((10,10))
     # ln = g.line((10,10), (10, 100))
-    sqr = g.square((50,50),100)
-    crl = g.cirle((200,200),50)
-    # ply = g.polygon([(10,110),(55,60),(100,110),(100,200),(55,150),(10,200)], color='red', fill='white')
+    sqr = g.square((50,250),100)
+    # crl = g.cirle((200,200),50)
+    ply = g.polygon([(10,110),(55,60),(100,110),(100,200),(55,150),(10,200)], color='red', fill='white')
     sqr2 = copy.deepcopy(sqr)
-    sqr2.scale(2)
-    sqr2.color = 'red'
+    sqr2.rotate(45)
+    ply2 = copy.deepcopy(ply)
+    ply2.translate(100,0)
+    ply2.rotate(90)
+    # sqr2.color = 'red'
     # make this into a method in the polgon object 
     # screen_objects.add(sqr)
-    screen_objects.add_multiple([sqr, sqr2, crl])
+    screen_objects.add_multiple([ply, ply2, sqr, sqr2])
+    screen_objects.translate(100,0)
+    screen_objects.rotate(180)
     
-    zoom(2)
+    # zoom(2)
     
     #pan(-100,-100)
     for obj in screen_objects.obj_list:

@@ -1,6 +1,7 @@
 # graphics_objects.py
 import itertools
 import math
+import math_funcs
 
 class group():
     def __init__(self):
@@ -15,6 +16,14 @@ class group():
 
     def rm(self, a):
         self.obj_list.remove(a)
+    
+    def translate(self, dx, dy):
+        for a in self.obj_list:
+            a.translate(dx, dy)
+    
+    def rotate(self, degrees, focus = (200,200)):
+        for a in self.obj_list:
+            a.rotate(degrees, focus)
     
     def __str__(self):
         return 'Group:'+', '.join(str(a) for a in self.obj_list)
@@ -33,6 +42,10 @@ class graphics_object():
         min_x = min(self.point_list, key=lambda x: x[0])
         min_y = min(self.point_list, key=lambda x: x[1])
         return (min_x[0], min_y[1])
+
+    def rotate(self, degrees, focus = (200,200)):
+        for i, point in enumerate(self.point_list):
+            self.point_list[i] = math_funcs.rotate(point, degrees, focus)
 
     def __str__(self):
         raise NotImplementedError
@@ -177,7 +190,6 @@ class polygon(graphics_object):
         else:
             self.point_list = self.generate_pointlist()
 
-
     def get_border(self):
         wireframe = graphics_object([], color = self.border_color)
         wireframe.point_list = self.generate_pointlist_nofill()
@@ -216,25 +228,6 @@ class polygon(graphics_object):
             elif y > y_max:
                 y_max = y
 
-        # # generate outline
-        # pts = self.generate_pointlist_nofill()
-
-        # # fill in the outline
-        # for y in range(y_min,y_max+1):
-        #     drawing = False
-        #     for x in range(x_min, x_max+1):
-        #         pt = (x,y)
-        #         if pts.count(pt) == 2 or pt in verts:
-        #             # This happens when lines oversect
-        #             # Like for tight angles
-        #             li.append(pt)
-        #             continue
-        #         if pts.count(pt) == 1:
-        #             # this is on 1 line
-        #             drawing = not drawing
-        #             continue
-        #         if drawing == True:
-        #             li.append(pt)
         edges = []
         for i in range(len(verts)-1):
             edges.append(line(verts[i], verts[i+1]).point_list)
@@ -273,16 +266,11 @@ class polygon(graphics_object):
                 x_values = list(range(x1,x2+1))
                 segment = [(x,y) for x in x_values]
                 li.extend(segment)
-                
-
-            # for x in range(x_min, x_max+1):
-            #     pt = (x,y)
-            #     # if there are an odd number of intersections on each side, etc
-                
-        
-        
-        # li.extend(pts)
         return li
+
+    
+
+
 
 if __name__ == "__main__":
     print('Main Thread')
