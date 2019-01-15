@@ -105,6 +105,16 @@ scl obj4 .5
 ![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_2.PNG)
 This example shows how transformations can be applied to groups:
 ```
+sqr (20,20) 20
+sqr (60,20) 20
+sqr (100,20) 20
+sqr (140,20) 20
+grp obj1 obj2 obj3 obj4
+cpy grp1
+rot grp2 90
+cpy grp1
+tra grp3 0 200
+scl grp3 2
 ```
 ![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_3.PNG)
 ### Text
