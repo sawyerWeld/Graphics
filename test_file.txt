@@ -1,10 +1,6 @@
-sqr (200,200) 50 red 
-ply (50,50) (10,10) (20,100) green fill
-crl (100,200) 75 yellow
-lin (100,0) (300,300) blue
-grp 1 2 3 4
-rot obj3 180
-tra obj1 10 80
-scl obj1 2.5
-txt (30,100) hello_world yellow
-sav test_save
+txt (60,60) hello_world yellow
+txt (60,80) this_is_my_font green
+txt (60,100) abcdefghijklmnopqrstuvwxyz./() white
+txt (60,120) it_is_monospaced._every_char_is_six
+txt (60,140) pixels_wide_and_eight_pixels_tall.
+txt (60,160) there_is_a_two_pixel_space_between_each.

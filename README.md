@@ -133,6 +133,15 @@ Spaces signal the end of a parameter in text commands, so '\_' is used instead
 ```
 txt (0,0) hello_world # 'hello world'
 ```
+```
+txt (60,60) hello_world yellow
+txt (60,80) this_is_my_font green
+txt (60,100) abcdefghijklmnopqrstuvwxyz./() white
+txt (60,120) it_is_monospaced._every_char_is_six
+txt (60,140) pixels_wide_and_eight_pixels_tall.
+txt (60,160) there_is_a_two_pixel_space_between_each.
+```
+![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_4.PNG)
 
 ### Saving / Loading
 
