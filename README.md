@@ -1,4 +1,4 @@
-# Graphics How To
+# Raster Graphics
 
 This graphics package can be interacted with programatically or using text commands.
 To use text commands save them in a file and pass the filename as argv[1].
