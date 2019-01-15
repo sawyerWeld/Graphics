@@ -1,9 +1,9 @@
 # Raster Graphics
 
-This graphics package can be interacted with programatically or using text commands.
+This graphics package can be interacted with programatically or using text commands.  
 To use text commands save them in a file and pass the filename as argv[1].
 
-For each piece of the API I show the method signature and an example using the text commands.
+For each piece of the API I show the method signature and an example using the text commands.  
 Colors are optional to specify, the defaults are shown in the method signatures.
 
 ### Graphics Objects
@@ -76,14 +76,15 @@ tra obj1 50 50
 tra grp1 50 50
 ```
 * Rotation  
-Rotates the target object or group of objects clockwise about of point. Angle is input in **degrees**.
-The default focus is (200,200) because the default window size is 400 x 400.
+Rotates the target object or group of objects clockwise about of point. 
+Angle is input in **degrees**.  
+The default focus is (200,200) because the default window size is 400 x 400.  
 ```
 rotate(45, focus=(200,200))
 rot obj1 45
 rot grp1 40 (100,100)
 ```
-* Scale
+* Scale  
 Scales the target object or group of objects. Accepts non-integer values.
 ```
 scale(2.0)  # Double in size
@@ -91,7 +92,7 @@ scale(0.5)  # Halve the size
 scl obj1 2.0
 scl grp1 0.5
 ```
-These methods as well as duplication can be seen in use in this example:
+These methods as well as duplication can be seen in use in this example:  
 ```
 ply (95,30) (170,90) (140,170) (60,170) (30,90) purple
 cpy obj1 
@@ -101,8 +102,8 @@ tra obj3 200 0
 cpy obj1
 tra obj4 0 200
 scl obj4 .5
-```
-![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_2.PNG)
+```  
+![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_2.PNG)  
 This example shows how transformations can be applied to groups:  
 ```
 sqr (20,20) 20
@@ -119,23 +120,23 @@ scl grp3 2
 ![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_3.PNG)
 ### Text
 
-Text is special graphics object which is intentionally not acted on by transformations
+Text is special graphics object which is intentionally not acted on by transformations  
 ```
 text((100,10), 'hello world', color='white')
 txt (100,10) hello_world white
 ```
-The valid characters are:
+The valid characters are:  
 ```
 abcdefghijklmnopqrstuvwxyz()./ and space
 ```
-Spaces signal the end of a parameter in text commands, so '\_' is used instead
+Spaces signal the end of a parameter in text commands, so '\_' is used instead  
 ```
 txt (0,0) hello_world # 'hello world'
 ```
 
 ### Saving / Loading
 
-Your drawings can be saved or loaded from disk.
+Your drawings can be saved or loaded from disk.  
 This works by pickling the graphics_object list of the screen_objects grouping.
 ```
 save(filename)
@@ -143,7 +144,7 @@ load(filename)
 sav newdrawing
 lod pastdrawing
 ```
-These default to the data_files subfolder within the graphics folder.
+These default to the data_files subfolder within the graphics folder.  
 The file extension should not be included, the program will do it for you.
 
 
