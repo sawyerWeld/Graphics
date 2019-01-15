@@ -2,10 +2,11 @@
 import itertools
 import math
 import math_funcs
+import text_funcs
 
 class group():
-    def __init__(self):
-        self.obj_list = []
+    def __init__(self, li = []):
+        self.obj_list = li
 
     def add(self, a):
         self.obj_list.append(a)
@@ -55,7 +56,7 @@ class graphics_object():
         raise NotImplementedError
 
     def __str__(self):
-        raise NotImplementedError
+        return 'Graphics object'
 
 class point(graphics_object):
     # Not for use in othe grpahics objects
@@ -138,7 +139,7 @@ class square(graphics_object):
     def __str__(self):
         return 'sqr'
 
-class cirle(graphics_object):
+class circle(graphics_object):
     # super.coords defines the center 
     def __init__(self, coords, radius, color = 'red'):
         self.coords = coords
@@ -152,8 +153,20 @@ class cirle(graphics_object):
         self.point_list = self.generate_pointlist()
 
     def generate_pointlist(self):
+        # possibly the hackiest thing ive done
+        # it wasnt working for cases where x!=y
+        # so i calculate it at 100,100 then translate it
+        x_start, y_start = self.coords
+        translated_point_list = self.generate_pointlist2((100,100))
+        return [(x+x_start-100,y+y_start-100) for x,y in translated_point_list]
+
+    def rotate(self, degrees, focus = (200,200)):
+        self.coords = math_funcs.rotate(self.coords, degrees, focus)
+        self.point_list = self.generate_pointlist()
+
+    def generate_pointlist2(self,coords):
         li = []
-        center = self.coords
+        center = coords
         r = self.radius
         arc = []
         x_c, y_c = center
@@ -178,16 +191,14 @@ class cirle(graphics_object):
         return li
 
 class polygon(graphics_object):
-    def __init__(self, vertex_list, color = 'purple', fill = None):
+    def __init__(self, vertex_list, color = 'purple', fill = False):
         self.coords = vertex_list[0]
         self.vertex_list = vertex_list
-        if fill == None:
+        self.color = color
+        if fill == False:
             # Wireframe
-            self.color = color
             self.point_list = self.generate_pointlist_nofill()
         else:
-            self.border_color = color
-            self.color = fill
             self.point_list = self.generate_pointlist()
         self.fill = fill
         
@@ -281,6 +292,29 @@ class polygon(graphics_object):
                 li.extend(segment)
         return li
 
+class text(graphics_object):
+    def __init__(self, coords, txt, color='white'):
+        self.txt = txt
+        self.coords = coords
+        self.point_list = self.generate_pointlist()
+        self.color = color
+
+    def generate_pointlist(self):
+        li = text_funcs.text_points(self.txt)
+        x_coord, y_coord = self.coords
+        return [(x+x_coord, y+y_coord) for x,y in li]
+
+    def translate(self, dx, dy):
+        return
+
+    def scale(self, scalar):
+        return
+
+    def rotate(self, degrees, focus = (200,200)):
+        return
+    
+    def __str__():
+        return self.txt
     
 
 

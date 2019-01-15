@@ -1,0 +1,2 @@
+lod test_save
+txt (0,380) loaded_from_file pink

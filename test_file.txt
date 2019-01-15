@@ -1,0 +1,10 @@
+sqr (200,200) 50 red 
+ply (50,50) (10,10) (20,100) green fill
+crl (100,200) 75 yellow
+lin (100,0) (300,300) blue
+grp 1 2 3 4
+rot obj3 180
+tra obj1 10 80
+scl obj1 2.5
+txt (30,100) hello_world yellow
+sav test_save
