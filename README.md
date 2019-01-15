@@ -108,3 +108,18 @@ Spaces signal the end of a parameter in text commands, so '\_' is used instead
 txt (0,0) hello_world # 'hello world'
 ```
 
+### Saving / Loading
+
+Your drawings can be saved or loaded from disk.
+This works by pickling the graphics_object list of the screen_objects grouping.
+```
+save(filename)
+load(filename)
+sav newdrawing
+lod pastdrawing
+```
+These default to the data_files subfolder within the graphics folder.
+The file extension should not be included, the program will do it for you.
+
+
+
