@@ -202,17 +202,43 @@ class polygon(graphics_object):
             self.point_list = self.generate_pointlist()
         self.fill = fill
         
+    def translate(self, dx, dy):
+        self.vertex_list = [(x+dx,y+dy) for (x,y) in self.vertex_list]
+        self.point_list = [(x+dx,y+dy) for (x,y) in self.point_list]
+    
+    # def rotate(self, degrees, focus = (200,00)):
+    #     for i, point in enumerate(self.vertex_list):
+    #         self.vertex_list[i] = math_funcs.rotate(point, degrees, focus)
+    #     if self.fill == False:
+    #         # Wireframe
+    #         self.point_list = self.generate_pointlist_nofill()
+    #     else:
+    #         self.point_list = self.generate_pointlist()
+    #     # for i, point in enumerate(self.point_list):
+    #     #     self.point_list[i] = math_funcs.rotate(point, degrees, focus)
+
     def scale(self, d):
         top_left_init = self.top_left_bound()
+        print(top_left_init)
         self.vertex_list = [(round(x*d),round(y*d)) for (x,y) in self.vertex_list]
         top_left_post = self.top_left_bound()
-        dx = top_left_post[0] - top_left_init[0]
-        dy = top_left_post[1] - top_left_init[1]
-        self.translate(-dx, -dy)
-        if self.fill == None:
-            self.generate_pointlist_nofill()
+        print(top_left_post)
+        dx = top_left_init[0] - top_left_post[0]
+        dy = top_left_init[1] - top_left_post[1]
+        
+        print('d', dx, dy)
+        print(self.top_left_bound())
+        if self.fill == False:
+            self.point_list = self.generate_pointlist_nofill()
         else:
             self.point_list = self.generate_pointlist()
+        self.translate(dx, dy)
+
+    def top_left_bound(self):
+        # Find the top left point in a rectangular bound of the obj
+        min_x = min(self.vertex_list, key=lambda x: x[0])
+        min_y = min(self.vertex_list, key=lambda x: x[1])
+        return (min_x[0], min_y[1])
 
     def get_border(self):
         wireframe = graphics_object([], color = self.border_color)

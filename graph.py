@@ -9,7 +9,7 @@ win = None # have to have this at global level to use zelle graphics
 width = 400
 height = 400
 real_space =  [['black' for j in range(width)] for i in range(height)]
-cur_color = 'green'
+cur_color = 'white'
 zoom_level = 1
 camera_position = (200,200)
 screen_objects = g.group() # the objects we want displayed
@@ -28,10 +28,14 @@ def draw_function():
     
     # This is where you can programmatically interact
     crl = g.circle((50,50),10,'blue')
-    
+    crl2 = copy_obj(crl)
+    crl2.translate(100,0)
     put_txt((10,380),'Drawn programmatically with function','yellow')
     
-    screen_objects.add_multiple([crl])
+    screen_objects.add_multiple([crl, crl2])
+
+def copy_obj(o):
+    return copy.deepcopy(o)
 
 # dont use
 def zoom(dz):
@@ -150,6 +154,12 @@ def read_file(filename):
 
             command = 'obj{} = g.line({},{}{})'.format(obj_count,pt1,pt2,color_string)
             
+            exec(command)
+            exec('file_items.append(obj{})'.format(obj_count))
+
+        elif func_name == 'cpy':
+            obj_count += 1
+            command = 'obj{} = copy_obj({})'.format(obj_count,line[1])
             exec(command)
             exec('file_items.append(obj{})'.format(obj_count))
 
