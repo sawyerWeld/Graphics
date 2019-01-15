@@ -29,12 +29,28 @@ def draw_function():
     # This is where you can programmatically interact
     crl = g.circle((50,50),10,'blue')
     crl2 = copy_obj(crl)
-    crl2.translate(100,0)
+    crl2.translate(50,0)
+    grp = g.group([crl,crl2])
+    grp2 = copy_group(grp)
+    grp2.translate(0,50)
+
     put_txt((10,380),'Drawn programmatically with function','yellow')
     
-    screen_objects.add_multiple([crl, crl2])
+    screen_objects.add_multiple(grp.obj_list)
+    screen_objects.add_multiple(grp2.obj_list)
 
 def copy_obj(o):
+    return copy.deepcopy(o)
+
+def copy_group(o):
+    # print('a')
+    # new_list = []
+    # for obj in o.obj_list:
+    #     print(obj)
+    #     new_list.append(copy_obj(obj))
+    # new_group = g.group()
+    # new_group.add_multiple(new_list)
+    # return new_group
     return copy.deepcopy(o)
 
 # dont use
@@ -158,10 +174,21 @@ def read_file(filename):
             exec('file_items.append(obj{})'.format(obj_count))
 
         elif func_name == 'cpy':
-            obj_count += 1
-            command = 'obj{} = copy_obj({})'.format(obj_count,line[1])
-            exec(command)
-            exec('file_items.append(obj{})'.format(obj_count))
+            # Copying objects
+            if line[-1][0] == 'o':
+                obj_count += 1
+                command = 'obj{} = copy_obj({})'.format(obj_count,line[1])
+                exec(command)
+                exec('file_items.append(obj{})'.format(obj_count))
+            else:
+                group_count += 1
+                copy_target = line[1]
+                command = 'grp{} = copy_group({})'.format(group_count, copy_target)
+                exec(command)
+                command = 'file_items.extend(grp{}.obj_list)'.format(group_count)
+                exec(command)
+                command = 'obj_count += len(grp{}.obj_list)'.format(group_count)
+                exec(command)
 
         # group command
         elif func_name == 'grp':

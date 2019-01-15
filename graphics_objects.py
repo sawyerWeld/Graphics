@@ -27,9 +27,25 @@ class group():
             a.rotate(degrees, focus)
     
     def scale(self, scalar):
+        start_tl = self.top_left_bound()
         for a in self.obj_list:
             a.scale(scalar)
+        end_tl = self.top_left_bound()
+
+        dx = start_tl[0] - end_tl[0]
+        dy = start_tl[1] - end_tl[1]
+        self.translate(dx, dy)
     
+    def top_left_bound(self):
+        all_points = []
+        for obj in self.obj_list:
+            all_points.extend(obj.point_list)
+        min_x = min(all_points, key=lambda x: x[0])
+        min_y = min(all_points, key=lambda x: x[1])
+        return (min_x[0], min_y[1])
+
+
+
     def __str__(self):
         return 'Group:'+', '.join(str(a) for a in self.obj_list)
 
@@ -122,6 +138,7 @@ class square(graphics_object):
         self.color = color
 
     def scale(self, scalar):
+        self.coords = tuple(a*scalar for a in self.coords)
         self.side_length = round(self.side_length * scalar)
         self.point_list = self.generate_pointlist()
 
@@ -206,28 +223,22 @@ class polygon(graphics_object):
         self.vertex_list = [(x+dx,y+dy) for (x,y) in self.vertex_list]
         self.point_list = [(x+dx,y+dy) for (x,y) in self.point_list]
     
-    # def rotate(self, degrees, focus = (200,00)):
-    #     for i, point in enumerate(self.vertex_list):
-    #         self.vertex_list[i] = math_funcs.rotate(point, degrees, focus)
-    #     if self.fill == False:
-    #         # Wireframe
-    #         self.point_list = self.generate_pointlist_nofill()
-    #     else:
-    #         self.point_list = self.generate_pointlist()
-    #     # for i, point in enumerate(self.point_list):
-    #     #     self.point_list[i] = math_funcs.rotate(point, degrees, focus)
+    def rotate(self, degrees, focus = (200,200)):
+        for i, point in enumerate(self.point_list):
+            self.point_list[i] = math_funcs.rotate(point, degrees, focus)
+        self.vertex_list = [math_funcs.rotate(x,degrees,focus) for x in self.vertex_list]
 
     def scale(self, d):
         top_left_init = self.top_left_bound()
-        print(top_left_init)
+        # print(top_left_init)
         self.vertex_list = [(round(x*d),round(y*d)) for (x,y) in self.vertex_list]
         top_left_post = self.top_left_bound()
-        print(top_left_post)
+        # print(top_left_post)
         dx = top_left_init[0] - top_left_post[0]
         dy = top_left_init[1] - top_left_post[1]
         
-        print('d', dx, dy)
-        print(self.top_left_bound())
+        # print('d', dx, dy)
+        # print(self.top_left_bound())
         if self.fill == False:
             self.point_list = self.generate_pointlist_nofill()
         else:
