@@ -99,6 +99,8 @@ def read_file(filename):
             fill_string = ''
 
             fill = False
+            color_specified = False
+
             if line[-1] == 'fill':
                 line.pop()
                 fill = True
@@ -109,11 +111,18 @@ def read_file(filename):
                     exec('vertex_list.append({})'.format(token))
                 else:
                     color_string = ',\'{}\''.format(token)
+                    color_specified = True
             
             fill_string = ',{}'.format(fill)
 
-            command = 'obj{} = g.polygon(vertex_list{}{})'.format(obj_count,color_string,fill_string)
-            
+            if color_specified == False and fill == False:
+                command = 'obj{} = g.polygon(vertex_list)'.format(obj_count)  
+            elif color_specified == True and fill == False:
+                command = 'obj{} = g.polygon(vertex_list{})'.format(obj_count,color_string)
+            elif color_specified == False and fill == True:
+                command = 'obj{} = g.polygon(vertex_list,fill=True)'.format(obj_count)
+            else:
+                command = 'obj{} = g.polygon(vertex_list{},fill=True)'.format(obj_count,color_string,fill_string)
             exec(command)
             exec('file_items.append(obj{})'.format(obj_count))
 
