@@ -103,7 +103,7 @@ tra obj4 0 200
 scl obj4 .5
 ```
 ![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_2.PNG)
-This example shows how transformations can be applied to groups:
+This example shows how transformations can be applied to groups:  
 ```
 sqr (20,20) 20
 sqr (60,20) 20
