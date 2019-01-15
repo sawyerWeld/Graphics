@@ -2,6 +2,7 @@ from graphics import *
 import graphics_objects as g
 import itertools
 import copy
+import text
 
 # Redoing graphics because it became a software engineering mess
 win = None # have to have this at global level to use zelle graphics
@@ -17,23 +18,32 @@ def pt(coords):
     x,y = coords
     real_space[x][y] = cur_color
 
+def put_txt(coords, str, color = 'white'):
+    global cur_color
+    cur_color = color
+    li = text.text_points(str)
+    x_coord, y_coord = coords
+    pt_list = [(x+x_coord, y+y_coord) for x,y in li]
+    for point in pt_list:
+        pt(point)
+
 def draw_function():
     # pt((10,10))
     # ln = g.line((10,10), (10, 100))
     sqr = g.square((50,250),100)
-    # crl = g.cirle((200,200),50)
+    crl = g.cirle((200,200),50)
     ply = g.polygon([(10,110),(55,60),(100,110),(100,200),(55,150),(10,200)], color='red', fill='white')
     sqr2 = copy.deepcopy(sqr)
-    sqr2.rotate(45)
-    ply2 = copy.deepcopy(ply)
-    ply2.translate(100,0)
-    ply2.rotate(90)
-    # sqr2.color = 'red'
+    crl2 = copy.deepcopy(crl)
+    sqr2.scale(.5)
+    crl2.scale(.75)
+    sqr2.color = 'red'
+    crl2.color = 'green'
+    put_txt((100,100), 'abcdefghijklmnopqrstuvwxyz()/.')
+    put_txt((100,110), 'This line should be just below that one',color='pink')
     # make this into a method in the polgon object 
     # screen_objects.add(sqr)
-    screen_objects.add_multiple([ply, ply2, sqr, sqr2])
-    screen_objects.translate(100,0)
-    screen_objects.rotate(180)
+    screen_objects.add_multiple([ply, sqr, sqr2, crl, crl2])
     
     # zoom(2)
     

@@ -25,6 +25,10 @@ class group():
         for a in self.obj_list:
             a.rotate(degrees, focus)
     
+    def scale(self, scalar):
+        for a in self.obj_list:
+            a.scale(scalar)
+    
     def __str__(self):
         return 'Group:'+', '.join(str(a) for a in self.obj_list)
 
@@ -46,6 +50,9 @@ class graphics_object():
     def rotate(self, degrees, focus = (200,200)):
         for i, point in enumerate(self.point_list):
             self.point_list[i] = math_funcs.rotate(point, degrees, focus)
+
+    def scale(self, scalar):
+        raise NotImplementedError
 
     def __str__(self):
         raise NotImplementedError
@@ -114,7 +121,7 @@ class square(graphics_object):
         self.color = color
 
     def scale(self, scalar):
-        self.side_length = math.floor(self.side_length * scalar)
+        self.side_length = round(self.side_length * scalar)
         self.point_list = self.generate_pointlist()
 
     # List of points in real space
@@ -139,8 +146,9 @@ class cirle(graphics_object):
         self.point_list = self.generate_pointlist()
         self.color = color
     
-    def scale(self, d):
-        self.radius *= d
+    def scale(self, scalar):
+        self.radius = round(scalar * self.radius)
+        print('new radius is {} units'.format(self.radius))
         self.point_list = self.generate_pointlist()
 
     def generate_pointlist(self):
@@ -184,7 +192,12 @@ class polygon(graphics_object):
         self.fill = fill
         
     def scale(self, d):
-        self.vertex_list = [(x*d,y*d) for (x,y) in self.vertex_list]
+        top_left_init = self.top_left_bound()
+        self.vertex_list = [(round(x*d),round(y*d)) for (x,y) in self.vertex_list]
+        top_left_post = self.top_left_bound()
+        dx = top_left_post[0] - top_left_init[0]
+        dy = top_left_post[1] - top_left_init[1]
+        self.translate(-dx, -dy)
         if self.fill == None:
             self.generate_pointlist_nofill()
         else:
