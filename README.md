@@ -91,7 +91,22 @@ scale(0.5)  # Halve the size
 scl obj1 2.0
 scl grp1 0.5
 ```
-
+These methods as well as duplication can be seen in use in this example:
+```
+ply (95,30) (170,90) (140,170) (60,170) (30,90) purple
+cpy obj1 
+rot obj2 180
+cpy obj1
+tra obj3 200 0
+cpy obj1
+tra obj4 0 200
+scl obj4 .5
+```
+![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_2.PNG)
+This example shows how transformations can be applied to groups:
+```
+```
+![alt text](https://github.com/sawyerWeld/Graphics/blob/master/images/image_3.PNG)
 ### Text
 
 Text is special graphics object which is intentionally not acted on by transformations
