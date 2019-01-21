@@ -305,7 +305,7 @@ class polygon(graphics_object):
         return (min_x[0], min_y[1])
 
     def get_border(self):
-        wireframe = graphics_object([], color = self.border_color)
+        wireframe = graphics_object([], color = self.color)
         wireframe.point_list = self.generate_pointlist_nofill()
         return wireframe
 
