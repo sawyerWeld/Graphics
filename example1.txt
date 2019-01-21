@@ -1,0 +1,17 @@
+# Example_1.txt
+crl (200,200) 40 yellow
+crl (143,143) 40 green
+crl (143,257) 40 green
+crl (257,143) 40 green
+crl (257,257) 40 green
+ply (190,200) (180,300) (190,400) (210,400) (220,300) (210,200) green fill
+grp obj1 obj2 obj3 obj4 obj5 obj6
+scl grp1 0.25
+tra grp1 -130 -84
+rot grp1 90
+cpy grp1
+cpy grp1
+cpy grp1
+rot grp2 90 (200,200)
+rot grp3 180 (200,200)
+rot grp4 270 (200,200)

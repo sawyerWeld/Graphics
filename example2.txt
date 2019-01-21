@@ -1,0 +1,8 @@
+ply (95,30) (170,90) (140,170) (60,170) (30,90) purple
+cpy obj1 
+rot obj2 180
+cpy obj1
+tra obj3 200 0
+cpy obj1
+tra obj4 0 200
+scl obj4 .5

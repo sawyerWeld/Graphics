@@ -3,6 +3,7 @@ import itertools
 import math
 import math_funcs
 import text_funcs
+from functools import reduce
 
 class group():
     def __init__(self, li = []):
@@ -22,15 +23,21 @@ class group():
         for a in self.obj_list:
             a.translate(dx, dy)
     
-    def rotate(self, degrees, focus = (200,200)):
+    def rotate(self, degrees, focus = None):
+        if focus == None:
+            focus = self.center_point()
+            # print(focus)
         for a in self.obj_list:
             a.rotate(degrees, focus)
     
     def scale(self, scalar):
-        start_tl = self.top_left_bound()
+        start_tl = self.center_point()
         for a in self.obj_list:
-            a.scale(scalar)
-        end_tl = self.top_left_bound()
+            if type(a) is polygon:
+                a.scale_nomove(scalar)
+            else:
+                a.scale(scalar)
+        end_tl = self.center_point()
 
         dx = start_tl[0] - end_tl[0]
         dy = start_tl[1] - end_tl[1]
@@ -44,7 +51,18 @@ class group():
         min_y = min(all_points, key=lambda x: x[1])
         return (min_x[0], min_y[1])
 
-
+    def center_point(self):
+        all_points = []
+        for obj in self.obj_list:
+            all_points.extend(obj.point_list)
+        sum_x = 0
+        sum_y = 0
+        for p in all_points:
+            sum_x += p[0]
+            sum_y += p[1]
+        sum_x = round(sum_x / len(all_points))
+        sum_y = round(sum_y / len(all_points))
+        return (sum_x, sum_y)
 
     def __str__(self):
         return 'Group:'+', '.join(str(a) for a in self.obj_list)
@@ -165,8 +183,27 @@ class circle(graphics_object):
         self.color = color
     
     def scale(self, scalar):
+        # self.radius = round(scalar * self.radius)
+        # print('new radius is {} units'.format(self.radius))
+        # self.point_list = self.generate_pointlist()
+
+        # top_left_init = self.top_left_bound()
+        # print(top_left_init)
+        x,y = self.coords
+        self.coords = (round(x*scalar),round(y*scalar))
         self.radius = round(scalar * self.radius)
-        print('new radius is {} units'.format(self.radius))
+        self.point_list = self.generate_pointlist()
+        # top_left_post = self.top_left_bound()
+        # print(top_left_post)
+        # dx = top_left_init[0] - top_left_post[0]
+        # dy = top_left_init[1] - top_left_post[1]
+        # self.translate(dx, dy)
+
+    def scalexy(self, dx, dy):
+        self.point_list = [(round(x*dx),round(y*dy)) for x,y in self.point_list]
+
+    def translate(self, dx, dy):
+        self.coords = (self.coords[0] + dx, self.coords[1] + dy)
         self.point_list = self.generate_pointlist()
 
     def generate_pointlist(self):
@@ -179,7 +216,13 @@ class circle(graphics_object):
 
     def rotate(self, degrees, focus = (200,200)):
         self.coords = math_funcs.rotate(self.coords, degrees, focus)
+        # print('circle center is now {},{}'.format(self.coords[0],self.coords[1]))
         self.point_list = self.generate_pointlist()
+
+    def rotate_elipse(self, degrees, focus = (200,200)):
+        self.point_list = [math_funcs.rotate(pt, degrees, focus) for pt in self.point_list]
+        # for i in range(len(self.point_list)-2):
+        #     self.point_list.extend(line(self.point_list[i],self.point_list[i+1]).point_list)
 
     def generate_pointlist2(self,coords):
         li = []
@@ -228,7 +271,17 @@ class polygon(graphics_object):
             self.point_list[i] = math_funcs.rotate(point, degrees, focus)
         self.vertex_list = [math_funcs.rotate(x,degrees,focus) for x in self.vertex_list]
 
+    def scale_nomove(self, d):
+        # scales without moving
+        # useful when moving a group, which moves its constituents
+        self.vertex_list = [(round(x*d),round(y*d)) for (x,y) in self.vertex_list]
+        if self.fill == False:
+            self.point_list = self.generate_pointlist_nofill()
+        else:
+            self.point_list = self.generate_pointlist()
+
     def scale(self, d):
+        print(type(self))
         top_left_init = self.top_left_bound()
         # print(top_left_init)
         self.vertex_list = [(round(x*d),round(y*d)) for (x,y) in self.vertex_list]
@@ -350,7 +403,7 @@ class text(graphics_object):
     def rotate(self, degrees, focus = (200,200)):
         return
     
-    def __str__():
+    def __str__(self):
         return self.txt
     
 

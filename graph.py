@@ -29,15 +29,12 @@ def draw_function():
     # This is where you can programmatically interact
     crl = g.circle((50,50),10,'blue')
     crl2 = copy_obj(crl)
-    crl2.translate(50,0)
-    grp = g.group([crl,crl2])
-    grp2 = copy_group(grp)
-    grp2.translate(0,50)
+    crl2.rotate(90)
 
-    put_txt((10,380),'Drawn programmatically with function','yellow')
+
+    put_txt((10,380),'Drawn programmatically with from drawfunction()','yellow')
     
-    screen_objects.add_multiple(grp.obj_list)
-    screen_objects.add_multiple(grp2.obj_list)
+    screen_objects.add_multiple([crl,crl2])
 
 def copy_obj(o):
     return copy.deepcopy(o)
@@ -142,7 +139,7 @@ def read_file(filename):
             elif color_specified == False and fill == True:
                 command = 'obj{} = g.polygon(vertex_list,fill=True)'.format(obj_count)
             else:
-                command = 'obj{} = g.polygon(vertex_list{},fill=True)'.format(obj_count,color_string,fill_string)
+                command = 'obj{} = g.polygon(vertex_list{},fill=True)'.format(obj_count,color_string)
             exec(command)
             exec('file_items.append(obj{})'.format(obj_count))
 
